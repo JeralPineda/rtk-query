@@ -39,6 +39,16 @@
       "title": "hgfdv",
       "body": "aSDasd",
       "id": 8
+    },
+    {
+      "title": "Prueba de insert",
+      "body": "Nueva prueba de insert",
+      "id": 9
+    },
+    {
+      "title": "Test 2",
+      "body": "Test 2",
+      "id": 10
     }
   ]
 }
