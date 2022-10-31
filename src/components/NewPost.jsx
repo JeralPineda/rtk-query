@@ -1,27 +1,19 @@
-import React, { useState } from "react";
-import { createNewPost } from "../api/posts";
+import { useState } from 'react';
+import { useAddNewPostMutation } from '../api/postsApi';
 
 function NewPost() {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [createPost, { isLoading, error }] = useAddNewPostMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setIsLoading(true);
-    try {
-      await createNewPost({ title, body });
+    await createPost({ title, body }).unwrap();
 
-      setTitle("");
-      setBody("");
-    } catch (error) {
-      setError(error);
-    }
-
-    setIsLoading(false);
+    setTitle('');
+    setBody('');
   };
 
   return (
@@ -32,41 +24,25 @@ function NewPost() {
           <label htmlFor="title" className="form-label">
             <b>Title:</b>
           </label>
-          <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            id="title"
-            className="form-control"
-          />
+          <input value={title} onChange={(e) => setTitle(e.target.value)} id="title" className="form-control" />
         </div>
         <div className="mb-2">
           <label className="form-label" htmlFor="content">
             <b>Content:</b>
           </label>
-          <textarea
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            style={{ resize: "vertical" }}
-            id="content"
-            className="form-control"
-          ></textarea>
+          <textarea value={body} onChange={(e) => setBody(e.target.value)} style={{ resize: 'vertical' }} id="content" className="form-control"></textarea>
         </div>
 
         <button disabled={isLoading || !title} className="btn btn-primary mb-2">
           {isLoading ? (
             <>
-              <span className="spinner-border spinner-border-sm"></span>{" "}
-              Submitting...
+              <span className="spinner-border spinner-border-sm"></span> Submitting...
             </>
           ) : (
-            "Submit"
+            'Submit'
           )}
         </button>
-        {error && (
-          <p className="alert alert-danger">
-            Error creating the post: {error.message}
-          </p>
-        )}
+        {error && <p className="alert alert-danger">Error creating the post: {error.error}</p>}
         {/* <div className="alert alert-success alert-dismissible" role="alert">
           The post was saved successfuly
           <button type="button" className="btn-close"></button>
